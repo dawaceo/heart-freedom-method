@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Heart Freedom Method</title>
+<meta name="description" content="A guided session for discovering and releasing subconscious limiting beliefs." />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#9a6db0" />
+<link rel="icon" href="favicon-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Heart Freedom" />
+<style>
+  :root{
+    --bg1:#f4efe9; --bg2:#e9e1f0; --bg3:#e3eef0;
+    --ink:#36303a; --ink-soft:#6c6473; --line:#ddd4dd;
+    --card:#fffefc; --accent:#9a6db0; --accent-deep:#7a4f93;
+    --accent-soft:#f0e7f4; --gold:#c9a24b; --ok:#5a9e7a;
+    --shadow:0 18px 50px -24px rgba(70,50,90,.45);
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:var(--sans); color:var(--ink);
+    background:linear-gradient(150deg,var(--bg1),var(--bg2) 55%,var(--bg3));
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased; line-height:1.55;
+    min-height:100dvh;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:22px 18px 120px;}
+
+  /* ---- top bar ---- */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .mark{width:30px;height:30px;flex:0 0 auto;}
+  .brand h1{font-family:var(--serif);font-size:1.06rem;font-weight:600;margin:0;letter-spacing:.2px;}
+  .brand small{display:block;font-size:.7rem;color:var(--ink-soft);letter-spacing:.14em;text-transform:uppercase;}
+  .iconbtn{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    border-radius:999px;padding:7px 12px;font-size:.8rem;cursor:pointer;display:inline-flex;
+    align-items:center;gap:6px;transition:.18s;}
+  .iconbtn:hover{color:var(--accent-deep);border-color:var(--accent);}
+  .iconbtn.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .toolrow{display:flex;gap:8px;}
+
+  /* ---- progress ---- */
+  .progress{display:flex;gap:5px;margin:6px 2px 20px;}
+  .pip{flex:1;height:5px;border-radius:6px;background:#e2d8e4;transition:.3s;}
+  .pip.done{background:var(--accent);}
+  .pip.cur{background:var(--gold);}
+
+  /* ---- card ---- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;
+    box-shadow:var(--shadow);padding:30px 26px 26px;animation:rise .2s ease;}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .step-no{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;}
+  .step-no .of{color:var(--ink-soft);font-weight:500;}
+  h2.title{font-family:var(--serif);font-size:1.7rem;line-height:1.2;margin:.3rem 0 .7rem;font-weight:600;}
+  .prompt{font-size:1.04rem;color:var(--ink);margin:0 0 14px;}
+  .prompt.lead{font-size:1.12rem;}
+
+  ul.bul{margin:0 0 16px;padding-left:0;list-style:none;}
+  ul.bul li{position:relative;padding:6px 0 6px 22px;color:var(--ink-soft);font-size:.96rem;}
+  ul.bul li::before{content:"";position:absolute;left:4px;top:14px;width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.6;}
+
+  .note{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 12px 12px 0;
+    padding:11px 14px;margin:14px 0;font-size:.95rem;color:var(--accent-deep);}
+  .note.soft{background:#f3f0ea;border-left-color:var(--gold);color:#7a6326;}
+
+  .coach{background:#e7f1ee;border:1px solid #bfddd2;border-left:3px solid var(--ok);
+    border-radius:0 12px 12px 0;padding:11px 14px;margin:14px 0;font-size:.95rem;color:#2f5e4c;}
+  .coach .tag{display:block;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:700;color:var(--ok);margin-bottom:4px;}
+
+  .seg{display:flex;gap:8px;margin:20px auto 4px;max-width:380px;}
+  .seg button{flex:1;border:1px solid var(--line);background:#fbf9fc;color:var(--ink-soft);
+    border-radius:12px;padding:11px 8px;font-size:.92rem;font-family:var(--sans);cursor:pointer;transition:.16s;}
+  .seg button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+
+  .safety{font-size:.82rem;color:var(--ink-soft);margin:18px auto 0;max-width:410px;line-height:1.5;}
+  .safety a{color:var(--accent-deep);cursor:pointer;white-space:nowrap;}
+  .support-box{text-align:left;background:#faf7fb;border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;margin:12px auto 0;max-width:410px;font-size:.85rem;color:var(--ink-soft);line-height:1.5;}
+  .support-box h4{margin:.1rem 0 .45rem;font-size:.9rem;color:var(--ink);}
+  .support-box a{color:var(--accent-deep);}
+  .support-box ul{margin:.5rem 0 0;padding-left:1.1rem;}
+  .support-box li{margin:.25rem 0;}
+
+  .truth{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0;}
+  .truth h4{margin:0 0 6px;font-family:var(--serif);font-size:1.08rem;color:var(--accent-deep);}
+  .truth p{margin:0;font-size:.95rem;color:var(--ink-soft);}
+
+  /* disclosure */
+  details{margin:10px 0 4px;}
+  details summary{cursor:pointer;list-style:none;color:var(--accent-deep);font-size:.86rem;
+    display:inline-flex;align-items:center;gap:6px;user-select:none;}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"ⓘ";font-size:.95rem;}
+  details[open] summary{margin-bottom:6px;}
+  details .body{font-size:.9rem;color:var(--ink-soft);background:#faf7fb;border-radius:10px;padding:10px 13px;}
+
+  /* fields */
+  .field{margin:14px 0;}
+  .field label{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:5px;}
+  .field .hint{font-weight:400;color:var(--ink-soft);}
+  input[type=text],textarea{width:100%;font-family:var(--sans);font-size:1rem;color:var(--ink);
+    background:#fbf9fc;border:1px solid var(--line);border-radius:12px;padding:11px 13px;resize:vertical;transition:.16s;}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft);}
+  textarea{min-height:78px;line-height:1.5;}
+  .input-wrap{position:relative;}
+  .input-wrap input,.input-wrap textarea{padding-right:46px;}
+  .mic{position:absolute;right:7px;bottom:7px;border:none;background:#f0e7f4;color:var(--accent-deep);
+    width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:1rem;line-height:1;
+    display:flex;align-items:center;justify-content:center;opacity:.7;transition:.15s;}
+  .mic:hover{opacity:1;}
+  .mic.rec{opacity:1;background:var(--accent);color:#fff;animation:pulse 1.1s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(154,109,176,.5)}70%{box-shadow:0 0 0 8px rgba(154,109,176,0)}}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;}
+  .grid2 .field{margin:0;display:flex;flex-direction:column;}
+  .grid2 .field .input-wrap{margin-top:auto;}
+  .field.full{grid-column:1/-1;}
+  @media(max-width:460px){.grid2{grid-template-columns:1fr;}}
+
+  .recall{background:#f3f0ea;border-radius:12px;padding:12px 14px;margin:12px 0;font-size:.9rem;}
+  .recall b{color:var(--accent-deep);}
+  .recall span{color:var(--ink-soft);}
+
+  /* nav */
+  .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,254,252,.86);
+    backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom));}
+  .nav .inner{max-width:680px;margin:0 auto;display:flex;gap:12px;align-items:center;}
+  .btn{flex:1;border:none;border-radius:14px;padding:14px;font-size:1rem;font-weight:600;cursor:pointer;transition:.18s;font-family:var(--sans);}
+  .btn.prim{background:var(--accent);color:#fff;box-shadow:0 10px 24px -10px var(--accent);}
+  .btn.prim:hover{background:var(--accent-deep);}
+  .btn.ghost{flex:0 0 auto;background:transparent;color:var(--ink-soft);border:1px solid var(--line);padding:14px 18px;}
+  .btn.ghost:hover{color:var(--accent-deep);border-color:var(--accent);}
+  .btn:disabled{opacity:.4;cursor:default;}
+
+  /* finish / record */
+  .record{white-space:pre-wrap;font-size:.9rem;background:#faf7fb;border:1px solid var(--line);
+    border-radius:12px;padding:14px;max-height:260px;overflow:auto;color:var(--ink-soft);line-height:1.5;}
+  .pillrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  .links a{color:var(--accent-deep);}
+  .center{text-align:center;}
+  .big-emoji{font-size:2.4rem;}
+  .muted{color:var(--ink-soft);font-size:.9rem;}
+
+  /* drawer (sessions) */
+  .drawer-bg{position:fixed;inset:0;background:rgba(50,40,60,.4);opacity:0;pointer-events:none;transition:.2s;z-index:40;}
+  .drawer-bg.show{opacity:1;pointer-events:auto;}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(340px,85vw);background:var(--card);
+    box-shadow:-20px 0 50px -20px rgba(60,40,80,.5);transform:translateX(100%);transition:.26s;z-index:41;padding:20px;overflow:auto;}
+  .drawer.show{transform:none;}
+  .drawer h3{font-family:var(--serif);margin:.2rem 0 1rem;}
+  .sess{border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:10px;cursor:pointer;transition:.15s;}
+  .sess:hover{border-color:var(--accent);}
+  .sess .t{font-weight:600;font-size:.92rem;}
+  .sess .d{font-size:.78rem;color:var(--ink-soft);}
+  .sess .x{float:right;color:var(--ink-soft);border:none;background:none;cursor:pointer;font-size:.9rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 41C24 41 7 30.5 7 18.5C7 12.7 11.5 8.5 16.6 8.5C20 8.5 22.6 10.4 24 13C25.4 10.4 28 8.5 31.4 8.5C36.5 8.5 41 12.7 41 18.5C41 30.5 24 41 24 41Z" stroke="#9a6db0" stroke-width="2.4" fill="#f0e7f4"/>
+        <path d="M16 21H21L23 17L26 26L28 21H32" stroke="#7a4f93" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>Heart Freedom Method</h1>
+        <small>A guided session</small>
+      </div>
+    </div>
+    <div class="toolrow">
+      <button class="iconbtn" id="modeBtn" title="Switch between solo and guiding someone">🧍 Solo</button>
+      <button class="iconbtn" id="voiceBtn" title="Read prompts aloud">🔊 Voice</button>
+      <button class="iconbtn" id="sessBtn" title="Saved sessions">☰</button>
+    </div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div id="stage"></div>
+</div>
+
+<div class="nav" id="nav">
+  <div class="inner">
+    <button class="btn ghost" id="back">Back</button>
+    <button class="btn prim" id="next">Begin</button>
+  </div>
+</div>
+
+<!-- sessions drawer -->
+<div class="drawer-bg" id="drawerBg"></div>
+<div class="drawer" id="drawer">
+  <h3>Saved sessions</h3>
+  <div id="sessList"></div>
+  <button class="iconbtn" id="newSess" style="margin-top:8px">＋ New session</button>
+  <div id="drawerSupport" style="margin-top:24px"></div>
+</div>
+
+<script>
+/* ============================================================
+   Heart Freedom Method — content model
+   Backbone: Chapter 7 "At a Glance", with operationally
+   essential lines grafted in from the long version.
+   ============================================================ */
+const STEPS = [
+  {
+    intro:true,
+    title:"Heart Freedom Method",
+    body:`A quiet, step-by-step space to discover and release a subconscious limiting belief.
+    Find a calm spot where you won't be disturbed. Move at your own pace — there is nothing to get right.`,
+    cta:"Begin"
+  },
+  {
+    n:1, title:"Where do you feel stuck?",
+    coach:"Ask what they'd like to work on. You don't need the whole story — just enough to begin.",
+    prompt:"Bring to mind a goal you can't seem to reach — or a pain or unwanted emotion you'd like to release.",
+    bullets:[
+      "A goal where you feel blocked, are procrastinating, or keep getting the opposite of what you want",
+      "A physical pain in your body",
+      "An unpleasant or unwanted emotion — fear, anger, anxiety…"
+    ],
+    fields:[{k:"focus",label:"What are you working on?",ta:true,ph:"e.g. I want to grow my business but keep stalling…"}],
+    info:"Dust off any wish or dream you've tucked away because 'what's the point of wanting something that will never happen?' It feels amazing to admit what you'd deep-down love — and it lifts the low mood that comes from not knowing what you want."
+  },
+  {
+    n:2, title:"Imagine having it",
+    coach:"Give them a quiet moment to picture already having it. Don't rush this.",
+    prompt:"Now imagine yourself actually experiencing the goal you haven't been able to achieve. Become as present with it as you can.",
+    note:"Ask yourself: <b>What would I be feeling and experiencing if I were already living this?</b>",
+    info:"For example, if the goal were earning $200,000 a year — what would you be feeling and experiencing if you already were? The more present you are with the outcome, the easier the next step."
+  },
+  {
+    n:3, title:"Scan your body",
+    coach:"Ask them to describe the sensation aloud — where, shape, color, temperature, texture. Note their exact words.",
+    prompt:"Become fully present with your body and scan it. As you hold the goal (or the pain / emotion) in mind, notice where a physical sensation shows up.",
+    fields:[
+      {k:"loc",label:"Location",hint:"Where exactly in your body?",full:true},
+      {k:"shape",label:"Shape & size",hint:"a ball, circle, sparkles, an amoeba…?"},
+      {k:"color",label:"Color",hint:"dark? light? a color?"},
+      {k:"temp",label:"Temperature",hint:"hot, cold, or neutral?"},
+      {k:"texture",label:"Texture",hint:"rough, smooth, spiky, bubbly, soft like a cloud?"}
+    ],
+    grid:true,
+    note:"There are no wrong answers. This is simply about becoming one with the sensation."
+  },
+  {
+    n:4, title:"Feel the emotion in it",
+    coach:"Ask what emotion lives in the sensation. If they're stuck, offer a few: anger? fear? sadness? guilt? Remind them to feel it, not think it.",
+    prompt:"Feel the emotion held inside that sensation. If there's more than one, choose the one that feels most dominant.",
+    note:"Don't <i>think</i> about the emotion — <b>feel into the sensation</b>. The point is to bypass the logical mind.",
+    fields:[{k:"emotion",label:"The emotion",hint:"anger? fear? depression? hopelessness? sadness? guilt?"}],
+    note2:"Then ask: <b>Is this an old feeling or a new one?</b> About 95% of the time, it's an old feeling."
+  },
+  {
+    n:5, title:"How old were you?",
+    coach:"Ask how old they were the first time they felt this. If they're stuck, offer gently: in utero? at birth? a baby? a toddler? 4? 8? 12? 15? Just wait — they'll get it. Then ask them to describe the scene: where they are, who's there, what's happening.",
+    prompt:"How old were you the first time you felt this way? Trust the first age that comes — just wait, and it will come.",
+    note:"In utero? Birth? A baby? A toddler? 4? 8? 12? 15? 20? 25?",
+    fields:[
+      {k:"age",label:"Age you first felt this"},
+      {k:"scene",label:"The scene",ta:true,hint:"Where are you? Who else is there? What's happening? Is there something you wanted and didn't get — or something happening you didn't want?"}
+    ]
+  },
+  {
+    n:6, title:"Soothe your younger self",
+    coach:"Guide them to go back and soothe their younger self — on their lap if a young child, knee-to-knee if older. Slow right down and let them feel the connection.",
+    prompt:"As the wiser adult you are now, go back in time and soothe yourself at that age. Do this with <i>feeling</i>, not just from your head — or it won't work.",
+    note:"If you were a young child, sit your younger self on your lap. If you were a teen or adult, sit knee to knee and hold hands.",
+    body:"Become one with them — breathe in unison, envelop them in love, offer a hug or a kiss. Ask yourself: <b>What would I tell my own child, or someone I love, in this same situation?</b>",
+    info:"This deep heart-connection is what dissolves the memory at a cellular level. Stay with your younger self until they feel your loving presence fully."
+  },
+  {
+    n:7, title:"The two truths",
+    coach:"Walk them through both truths. Stay with each until they reach real relief and gratitude — not just an idea, but a felt shift.",
+    prompt:"Help your younger self reach these two truths. Stay with them until they feel free inside and grateful.",
+    truths:[
+      {h:"Truth 1 — You are worthy of love",
+       p:"What happened doesn't mean something was wrong with you. What was really going on <i>around</i> you — the pressures, limitations, or struggles of others? Even if it felt like your mom didn't love you, perhaps she was stressed or overwhelmed — her actions a reflection of her own struggles, not your worth."},
+      {h:"Truth 2 — It happened for you",
+       p:"What was the blessing in disguise? How did you benefit? Why might your higher self — who always wants the best for you — have wanted this for your growth? What would the drawbacks have been if it hadn't happened?"}
+    ],
+    info:"More of Truth 2 to explore: How did this drive you to unfold your unique path? What talents, interests, or people in your life now came because of it? What qualities — empathy, compassion, courage, persistence — did you develop? Where did it redirect your energy? What search did it send you on? Tell your younger self every blessing that came from it.",
+    fields:[
+      {k:"limiting",label:"The limiting belief or decision I made",ta:true,ph:"e.g. 'I'm not safe asking for what I want.'"},
+      {k:"newbelief",label:"A new, empowering belief",ta:true,ph:"e.g. 'It is safe for me to want, and to receive.'"}
+    ],
+    note2:"Reaching genuine gratitude here raises your sense of worthiness — and that begins to ripple into every area of your life."
+  },
+  {
+    n:8, title:"Meet your future self",
+    coach:"Lead them 20 years ahead, having fully succeeded. Ask what their wiser future self wants to tell them — and have them feel it as true now.",
+    prompt:"Project 20 years into the future — happy, wise, at peace, having fully succeeded at the goal you're working on. As that older, wiser self, what do you want to tell your present-aged self?",
+    note:"See yourself as having <b>already</b> achieved it. Then bring that reality into the present and feel it NOW — you can only create from the present, never from the future.",
+    fields:[{k:"future",label:"Message from my future self",ta:true,ph:"insights, advice, encouragement, instructions…"}]
+  },
+  {
+    n:9, title:"Check the sensation",
+    coach:"Ask them to come back to today and re-check the original sensation. What's changed? If something remains, you can run the method again on what's left.",
+    prompt:"Take a breath and return to your current age. Now go back to the original sensation from Step 3 and notice what has happened to it.",
+    recall:true,
+    bullets:[
+      "Gone or greatly diminished? Wonderful — you're done.",
+      "Transformed into something soothing, like love or gratitude? Bask in it a little longer.",
+      "Still partly there? That's fine — it just means another story is waiting to be addressed, now or in a future session."
+    ],
+    loop:true
+  },
+  {
+    n:10, title:"Integrate & celebrate",
+    coach:"Celebrate with them. Afterward, invite them to share their experience with you out loud — saying it helps it land.",
+    prompt:"Celebrate yourself for doing this work. Celebration anchors the change — it tells your heart 'this is who I am now,' and your subconscious begins to create from that truth.",
+    fields:[{k:"insights",label:"Insights & awarenesses from this session",ta:true,ph:"What did you discover? What feels different now?"}],
+    body:"A few ways to ground it: write your new belief on index cards or Post-its and place them where you'll see them daily for a month • share your experience with someone you trust • download the free integration worksheet.",
+    links:[
+      ["drlisejanelle.com/HFMWorksheet","http://drlisejanelle.com/HFMWorksheet"],
+      ["jackcanfield.com/HFMWorksheet","https://www.jackcanfield.com/HFMWorksheet"]
+    ],
+    finish:true
+  }
+];
+
+/* ---------------- state ---------------- */
+const LS_KEY="hfm_sessions_v1";
+let sessions = load();
+let sid = null;
+let data = {};
+let idx = 0;
+let voiceOn = false;
+let coachMode = (localStorage.getItem("hfm_mode")==="coach");
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const SR_OK = !!SR;
+let activeRec=null, activeMic=null;
+
+function supportHTML(){
+  return `<div class="support-box">
+    <h4>If strong feelings come up</h4>
+    This is a tool for gentle, self-guided reflection &mdash; not therapy or crisis care. Go at your own pace, and pause any time. If you'd like support:
+    <ul>
+      <li><b>US</b> &mdash; call or text <b>988</b> (Suicide &amp; Crisis Lifeline), or text <b>HOME</b> to <b>741741</b></li>
+      <li><b>UK &amp; Ireland</b> &mdash; call <b>116 123</b> (Samaritans)</li>
+      <li><b>Anywhere</b> &mdash; find a helpline at <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a></li>
+      <li>If you&rsquo;re in immediate danger, contact your local emergency number.</li>
+    </ul>
+  </div>`;
+}
+
+function load(){ try{return JSON.parse(localStorage.getItem(LS_KEY))||[]}catch(e){return[]} }
+function persist(){ localStorage.setItem(LS_KEY, JSON.stringify(sessions)); }
+function newSession(){
+  sid = "s"+Date.now();
+  data = { id:sid, created:new Date().toISOString(), answers:{} };
+  sessions.unshift(data); persist();
+  idx = 0; render();
+}
+function saveAnswers(){
+  const cur = STEPS[idx];
+  if(cur.fields){ cur.fields.forEach(f=>{
+    const el=document.getElementById("f_"+f.k); if(el) data.answers[f.k]=el.value;
+  });}
+  persist();
+}
+
+/* ---------------- rendering ---------------- */
+const stage=document.getElementById("stage");
+const progress=document.getElementById("progress");
+const backBtn=document.getElementById("back");
+const nextBtn=document.getElementById("next");
+
+function buildProgress(){
+  progress.innerHTML="";
+  for(let i=1;i<STEPS.length;i++){
+    const p=document.createElement("div");
+    p.className="pip"+(i<idx?" done":i===idx?" cur":"");
+    progress.appendChild(p);
+  }
+}
+
+function fieldHTML(f){
+  const val = (data.answers[f.k]||"").replace(/"/g,"&quot;");
+  const lab = `<label for="f_${f.k}">${f.label}${f.hint?` <span class="hint">— ${f.hint}</span>`:""}</label>`;
+  const mic = SR_OK ? `<button type="button" class="mic" data-for="f_${f.k}" title="Dictate by voice" aria-label="Dictate by voice">🎤</button>` : "";
+  if(f.ta) return `<div class="field full">${lab}<div class="input-wrap"><textarea id="f_${f.k}" placeholder="${f.ph||""}">${val}</textarea>${mic}</div></div>`;
+  return `<div class="field${f.full?' full':''}">${lab}<div class="input-wrap"><input type="text" id="f_${f.k}" value="${val}" placeholder="${f.ph||""}"/>${mic}</div></div>`;
+}
+
+function render(){
+  buildProgress();
+  const s=STEPS[idx];
+  let h="";
+
+  if(s.intro){
+    const introBody = coachMode
+      ? `You'll guide someone else through the 10 steps. Read each prompt aloud, slowly, and follow the cues marked <b>For the guide</b>. Let them keep their eyes closed and take all the time they need.`
+      : s.body;
+    h=`<div class="card center">
+        <div class="big-emoji">${coachMode?"🤝":"🤍"}</div>
+        <h2 class="title" style="margin-top:.4rem">${s.title}</h2>
+        <p class="prompt lead">${introBody}</p>
+        <div class="seg" id="introSeg">
+          <button class="${coachMode?'':'on'}" data-m="solo">🧍 Just me</button>
+          <button class="${coachMode?'on':''}" data-m="coach">🤝 Guiding someone</button>
+        </div>
+        <p class="safety">A space for gentle self-reflection &mdash; not a substitute for therapy. Move at your own pace, and pause whenever you need. <a id="supportToggle">If you need support&nbsp;&rarr;</a></p>
+        <div id="supportSlot"></div>
+       </div>`;
+    stage.innerHTML=h;
+    document.querySelectorAll("#introSeg button").forEach(b=>{
+      b.onclick=()=>setMode(b.dataset.m==="coach");
+    });
+    document.getElementById("supportToggle").onclick=function(){
+      const slot=document.getElementById("supportSlot");
+      slot.innerHTML = slot.innerHTML ? "" : supportHTML();
+    };
+    backBtn.style.visibility="hidden";
+    nextBtn.textContent=sessions.length>1?"Begin":s.cta;
+    speak(s.title+". "+introBody.replace(/<[^>]+>/g,""));
+    return;
+  }
+
+  backBtn.style.visibility="visible";
+
+  if(s.finish){
+    h=`<div class="card">
+        <div class="step-no">Step 10 <span class="of">/ 10</span></div>
+        <h2 class="title">${s.title}</h2>
+        <p class="prompt">${s.prompt}</p>
+        ${coachMode && s.coach ? `<div class="coach"><span class="tag">For the guide</span>${s.coach}</div>` : ""}
+        ${s.fields.map(fieldHTML).join("")}
+        <p class="muted">${s.body}</p>
+        <p class="links muted">${s.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join(" &nbsp;·&nbsp; ")}</p>
+        <details><summary>Your session record</summary><div class="record" id="recordOut"></div></details>
+        <div class="pillrow">
+          <button class="iconbtn" id="exportBtn">⬇︎ Export markdown</button>
+          <button class="iconbtn" id="copyBtn">⧉ Copy</button>
+          <button class="iconbtn" id="againBtn">↻ New session</button>
+        </div>
+       </div>`;
+    stage.innerHTML=h;
+    document.getElementById("recordOut").textContent=toMarkdown();
+    document.getElementById("exportBtn").onclick=exportMd;
+    document.getElementById("copyBtn").onclick=()=>{navigator.clipboard.writeText(toMarkdown());flash(document.getElementById("copyBtn"),"Copied ✓");};
+    document.getElementById("againBtn").onclick=newSession;
+    wireMics();
+    nextBtn.textContent="Done";
+    speak(s.title+". "+s.prompt);
+    return;
+  }
+
+  let parts=[`<div class="step-no">Step ${s.n} <span class="of">/ 10</span></div>`,
+             `<h2 class="title">${s.title}</h2>`,
+             `<p class="prompt">${s.prompt}</p>`];
+  if(coachMode && s.coach) parts.push(`<div class="coach"><span class="tag">For the guide</span>${s.coach}</div>`);
+  if(s.note) parts.push(`<div class="note">${s.note}</div>`);
+  if(s.recall) parts.push(recallHTML());
+  if(s.bullets) parts.push(`<ul class="bul">${s.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>`);
+  if(s.truths) s.truths.forEach(t=>parts.push(`<div class="truth"><h4>${t.h}</h4><p>${t.p}</p></div>`));
+  if(s.fields) parts.push(`<div class="${s.grid?'grid2':''}">${s.fields.map(fieldHTML).join("")}</div>`);
+  if(s.note2) parts.push(`<div class="note soft">${s.note2}</div>`);
+  if(s.body) parts.push(`<p class="prompt" style="font-size:1rem">${s.body}</p>`);
+  if(s.info) parts.push(`<details><summary>More on this step</summary><div class="body">${s.info}</div></details>`);
+  if(s.loop) parts.push(`<div class="pillrow"><button class="iconbtn" id="loopBtn">↻ Run the method again on what's left</button></div>`);
+
+  stage.innerHTML=`<div class="card">${parts.join("")}</div>`;
+  wireMics();
+  if(s.loop) document.getElementById("loopBtn").onclick=()=>{saveAnswers();idx=1;render();};
+
+  nextBtn.textContent = "Continue";
+  // build spoken text from prompt + notes
+  let spoken=s.title+". "+s.prompt.replace(/<[^>]+>/g,"");
+  if(s.note) spoken+=" "+s.note.replace(/<[^>]+>/g,"");
+  speak(spoken);
+}
+
+function recallHTML(){
+  const a=data.answers;
+  const bits=[["Location",a.loc],["Shape",a.shape],["Color",a.color],["Temp",a.temp],["Texture",a.texture]]
+    .filter(x=>x[1]).map(x=>`<b>${x[0]}:</b> <span>${x[1]}</span>`);
+  if(!bits.length) return "";
+  return `<div class="recall">You started with — ${bits.join(" &nbsp; ")}</div>`;
+}
+
+/* ---------------- navigation ---------------- */
+nextBtn.onclick=()=>{
+  if(activeRec) activeRec.stop();
+  if(!STEPS[idx].intro) saveAnswers();
+  if(STEPS[idx].finish){ openDrawer(); return; }
+  idx=Math.min(idx+1,STEPS.length-1); render(); window.scrollTo(0,0);
+};
+backBtn.onclick=()=>{
+  if(activeRec) activeRec.stop();
+  if(!STEPS[idx].intro) saveAnswers();
+  idx=Math.max(idx-1,0); render(); window.scrollTo(0,0);
+};
+
+/* ---------------- export ---------------- */
+function fmtDate(iso){ const d=new Date(iso); return d.toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}); }
+function toMarkdown(){
+  const a=data.answers;
+  const L=[];
+  L.push(`# Heart Freedom Method — Session`);
+  L.push(`*${fmtDate(data.created)}${coachMode?" · guided by a partner":""}*`,"");
+  if(a.focus){L.push(`**Working on:** ${a.focus}`,"");}
+  L.push(`## Step 3 — Sensation`);
+  L.push(`- Location: ${a.loc||"—"}`,`- Shape/size: ${a.shape||"—"}`,`- Color: ${a.color||"—"}`,`- Temperature: ${a.temp||"—"}`,`- Texture: ${a.texture||"—"}`,"");
+  L.push(`## Step 4 — Emotion`,`${a.emotion||"—"}`,"");
+  L.push(`## Step 5 — Age & scene`,`Age: ${a.age||"—"}`,"",`${a.scene||"—"}`,"");
+  L.push(`## Step 7 — Beliefs`,`**Limiting belief:** ${a.limiting||"—"}`,"",`**New empowering belief:** ${a.newbelief||"—"}`,"");
+  L.push(`## Step 8 — Future self`,`${a.future||"—"}`,"");
+  L.push(`## Step 10 — Insights`,`${a.insights||"—"}`,"");
+  return L.join("\n");
+}
+function exportMd(){
+  const blob=new Blob([toMarkdown()],{type:"text/markdown"});
+  const url=URL.createObjectURL(blob);
+  const aTag=document.createElement("a");
+  aTag.href=url; aTag.download="HFM-session-"+data.created.slice(0,10)+".md";
+  aTag.click(); URL.revokeObjectURL(url);
+}
+function flash(btn,txt){const o=btn.textContent;btn.textContent=txt;setTimeout(()=>btn.textContent=o,1400);}
+
+/* ---------------- mode (solo / coach) ---------------- */
+const modeBtn=document.getElementById("modeBtn");
+function updateModeBtn(){
+  modeBtn.textContent = coachMode ? "🤝 Guiding" : "🧍 Solo";
+  modeBtn.classList.toggle("on", coachMode);
+}
+function setMode(c){
+  coachMode=c;
+  localStorage.setItem("hfm_mode", c?"coach":"solo");
+  updateModeBtn();
+  render();
+}
+modeBtn.onclick=()=>setMode(!coachMode);
+updateModeBtn();
+
+/* ---------------- voice ---------------- */
+const voiceBtn=document.getElementById("voiceBtn");
+voiceBtn.onclick=()=>{
+  voiceOn=!voiceOn; voiceBtn.classList.toggle("on",voiceOn);
+  if(!voiceOn && window.speechSynthesis) speechSynthesis.cancel();
+  if(voiceOn) render(); // trigger speak of current
+};
+function speak(text){
+  if(!voiceOn || !window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=1.05; u.pitch=1; u.volume=1;
+  speechSynthesis.speak(u);
+}
+
+/* ---------------- voice input (dictation) ---------------- */
+function wireMics(){
+  if(!SR_OK) return;
+  document.querySelectorAll(".mic").forEach(function(btn){
+    btn.onclick=function(){ toggleDictation(btn.dataset.for, btn); };
+  });
+}
+function stopMic(btn){ if(btn) btn.classList.remove("rec"); activeRec=null; activeMic=null; }
+function toggleDictation(targetId, btn){
+  if(activeRec && activeMic===btn){ activeRec.stop(); return; }   // tap again to stop
+  if(activeRec){ activeRec.stop(); }
+  if(window.speechSynthesis) speechSynthesis.cancel();            // don't transcribe our own voice
+  const el=document.getElementById(targetId);
+  if(!el) return;
+  const base = (el.value && el.value.trim()) ? el.value.trim()+" " : "";
+  const rec=new SR();
+  rec.lang = navigator.language || "en-US";
+  rec.interimResults=true; rec.continuous=true;
+  const ph=el.placeholder; el.placeholder="Listening…";
+  rec.onresult=function(e){
+    let txt=""; for(let i=0;i<e.results.length;i++){ txt+=e.results[i][0].transcript; }
+    el.value = base + txt;
+  };
+  rec.onerror=function(){ el.placeholder=ph; stopMic(btn); };
+  rec.onend=function(){ el.placeholder=ph; stopMic(btn); saveAnswers(); };
+  activeRec=rec; activeMic=btn; btn.classList.add("rec"); el.focus();
+  try{ rec.start(); }catch(err){ el.placeholder=ph; stopMic(btn); }
+}
+
+/* ---------------- sessions drawer ---------------- */
+const drawer=document.getElementById("drawer");
+const drawerBg=document.getElementById("drawerBg");
+const sessList=document.getElementById("sessList");
+document.getElementById("sessBtn").onclick=openDrawer;
+document.getElementById("newSess").onclick=()=>{newSession();closeDrawer();};
+drawerBg.onclick=closeDrawer;
+function openDrawer(){ renderSessions(); document.getElementById("drawerSupport").innerHTML=supportHTML(); drawer.classList.add("show"); drawerBg.classList.add("show"); }
+function closeDrawer(){ drawer.classList.remove("show"); drawerBg.classList.remove("show"); }
+function renderSessions(){
+  if(!sessions.length){ sessList.innerHTML=`<p class="muted">No sessions yet.</p>`; return; }
+  sessList.innerHTML="";
+  sessions.forEach(s=>{
+    const focus=(s.answers&&s.answers.focus)?s.answers.focus.slice(0,48):"Untitled session";
+    const el=document.createElement("div"); el.className="sess";
+    el.innerHTML=`<button class="x" data-id="${s.id}">✕</button>
+      <div class="t">${focus||"Untitled session"}</div>
+      <div class="d">${fmtDate(s.created)}</div>`;
+    el.onclick=(e)=>{
+      if(e.target.classList.contains("x")) return;
+      sid=s.id; data=s; idx=1; render(); closeDrawer();
+    };
+    el.querySelector(".x").onclick=(e)=>{
+      e.stopPropagation();
+      sessions=sessions.filter(x=>x.id!==s.id); persist();
+      if(data&&data.id===s.id){ if(sessions.length){data=sessions[0];sid=data.id;}else{newSession();} }
+      renderSessions();
+    };
+    sessList.appendChild(el);
+  });
+}
+
+/* ---------------- boot ---------------- */
+if(sessions.length){ data=sessions[0]; sid=data.id; } else { newSession(); }
+idx=0; render();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+}
+</script>
+</body>
+</html>

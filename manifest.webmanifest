@@ -1,0 +1,16 @@
+{
+  "name": "Heart Freedom Method",
+  "short_name": "Heart Freedom",
+  "description": "A guided session for discovering and releasing subconscious limiting beliefs.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#efe9f2",
+  "theme_color": "#9a6db0",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
