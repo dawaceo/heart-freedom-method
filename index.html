@@ -161,6 +161,10 @@
   .sess .t{font-weight:600;font-size:.92rem;}
   .sess .d{font-size:.78rem;color:var(--ink-soft);}
   .sess .x{float:right;color:var(--ink-soft);border:none;background:none;cursor:pointer;font-size:.9rem;}
+  .vp-h{font-family:var(--serif);margin:0 0 .5rem;font-size:1rem;color:var(--ink);}
+  #voicePicker select{width:100%;font-family:var(--sans);font-size:.95rem;color:var(--ink);
+    background:#fbf9fc;border:1px solid var(--line);border-radius:10px;padding:9px 11px;}
+  #voicePicker select:focus{outline:none;border-color:var(--accent);}
 </style>
 </head>
 <body>
@@ -200,6 +204,7 @@
   <h3>Saved sessions</h3>
   <div id="sessList"></div>
   <button class="iconbtn" id="newSess" style="margin-top:8px">＋ New session</button>
+  <div id="voicePicker" style="margin-top:24px"></div>
   <div id="drawerSupport" style="margin-top:24px"></div>
 </div>
 
@@ -565,25 +570,28 @@ voiceBtn.onclick=()=>{
   if(voiceOn) render(); // trigger speak of current
 };
 let chosenVoice=null;
+let voiceURI=localStorage.getItem("hfm_voice")||"";
+function enVoices(){
+  if(!window.speechSynthesis) return [];
+  return speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+}
+function voiceScore(v){
+  let s=0; const n=v.name.toLowerCase();
+  if(/enhanced|premium|natural|neural/.test(n)) s+=6;   // high-quality downloadable voices
+  if(/siri/.test(n)) s+=5;
+  if(/samantha|serena|allison|ava|zoe|karen|moira|daniel|nicky|aaron/.test(n)) s+=3;
+  if(/google/.test(n)) s+=2;
+  if(/female/.test(n)) s+=1;
+  if(v.default) s+=1;
+  if(/compact|eloquence|albert|zarvox|fred|junior|ralph|whisper|bells|boing|bad|bahh|trinoids|wobble/.test(n)) s-=6; // novelty/robotic
+  return s;
+}
 function pickVoice(){
-  if(!window.speechSynthesis) return;
-  const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
-  if(!vs.length) return;
-  const score=v=>{
-    let s=0; const n=v.name.toLowerCase();
-    if(/enhanced|premium|natural|neural/.test(n)) s+=6;   // high-quality device voices
-    if(/siri/.test(n)) s+=5;
-    if(/samantha|serena|allison|ava|zoe|karen|moira|daniel|nicky|aaron/.test(n)) s+=3;
-    if(/google/.test(n)) s+=2;
-    if(/female/.test(n)) s+=1;
-    if(v.default) s+=1;
-    if(/compact|eloquence|albert|zarvox|fred|junior|ralph|whisper|bells|boing|bad|bahh|trinoids/.test(n)) s-=6; // novelty/robotic
-    return s;
-  };
-  vs.sort((a,b)=>score(b)-score(a));
+  const vs=enVoices(); if(!vs.length) return;
+  if(voiceURI){ const saved=vs.find(v=>v.voiceURI===voiceURI); if(saved){ chosenVoice=saved; return; } }
+  vs.sort((a,b)=>voiceScore(b)-voiceScore(a));
   chosenVoice=vs[0];
 }
-if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
 function speak(text){
   if(!voiceOn || !window.speechSynthesis) return;
   speechSynthesis.cancel();
@@ -593,6 +601,29 @@ function speak(text){
   u.rate=1.0; u.pitch=1; u.volume=1;
   speechSynthesis.speak(u);
 }
+function testVoice(){
+  if(!window.speechSynthesis) return;
+  pickVoice(); speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance("Take a slow breath, and let yourself settle. I'm right here with you.");
+  if(chosenVoice) u.voice=chosenVoice; u.rate=1.0; u.pitch=1;
+  speechSynthesis.speak(u);
+}
+function populateVoicePicker(){
+  const wrap=document.getElementById("voicePicker"); if(!wrap) return;
+  const vs=enVoices();
+  if(!window.speechSynthesis){ wrap.innerHTML=""; return; }
+  if(!vs.length){ wrap.innerHTML='<h4 class="vp-h">Narration voice</h4><div class="muted" style="font-size:.82rem">Voices are still loading — reopen this menu in a moment.</div>'; return; }
+  vs.sort((a,b)=>voiceScore(b)-voiceScore(a));
+  if(!chosenVoice) pickVoice();
+  const opts=vs.map(v=>`<option value="${v.voiceURI}"${chosenVoice&&v.voiceURI===chosenVoice.voiceURI?" selected":""}>${v.name}</option>`).join("");
+  wrap.innerHTML=`<h4 class="vp-h">Narration voice</h4>
+    <select id="voiceSel">${opts}</select>
+    <button class="iconbtn" id="voiceTest" style="margin-top:9px">▶ Hear this voice</button>
+    <div class="muted" style="font-size:.78rem;margin-top:9px;line-height:1.45">Tip: on iPhone/Mac, download an &ldquo;Enhanced&rdquo; or &ldquo;Premium&rdquo; voice in Settings → Accessibility → Spoken Content → Voices for the most natural sound, then pick it here.</div>`;
+  document.getElementById("voiceSel").onchange=function(){ voiceURI=this.value; localStorage.setItem("hfm_voice",voiceURI); pickVoice(); testVoice(); };
+  document.getElementById("voiceTest").onclick=testVoice;
+}
+if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=function(){ pickVoice(); populateVoicePicker(); }; }
 
 /* ---------------- voice input (dictation) ---------------- */
 function wireMics(){
@@ -650,7 +681,7 @@ const sessList=document.getElementById("sessList");
 document.getElementById("sessBtn").onclick=openDrawer;
 document.getElementById("newSess").onclick=()=>{newSession();closeDrawer();};
 drawerBg.onclick=closeDrawer;
-function openDrawer(){ renderSessions(); document.getElementById("drawerSupport").innerHTML=supportHTML(); drawer.classList.add("show"); drawerBg.classList.add("show"); }
+function openDrawer(){ renderSessions(); populateVoicePicker(); document.getElementById("drawerSupport").innerHTML=supportHTML(); drawer.classList.add("show"); drawerBg.classList.add("show"); }
 function closeDrawer(){ drawer.classList.remove("show"); drawerBg.classList.remove("show"); }
 function renderSessions(){
   if(!sessions.length){ sessList.innerHTML=`<p class="muted">No sessions yet.</p>`; return; }

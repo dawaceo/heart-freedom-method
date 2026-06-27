@@ -1,5 +1,5 @@
 /* Heart Freedom Method — offline cache */
-const CACHE = "hfm-v2";
+const CACHE = "hfm-v3";
 const ASSETS = [
   "./",
   "./index.html",
