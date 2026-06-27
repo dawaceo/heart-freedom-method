@@ -564,11 +564,33 @@ voiceBtn.onclick=()=>{
   if(!voiceOn && window.speechSynthesis) speechSynthesis.cancel();
   if(voiceOn) render(); // trigger speak of current
 };
+let chosenVoice=null;
+function pickVoice(){
+  if(!window.speechSynthesis) return;
+  const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  if(!vs.length) return;
+  const score=v=>{
+    let s=0; const n=v.name.toLowerCase();
+    if(/enhanced|premium|natural|neural/.test(n)) s+=6;   // high-quality device voices
+    if(/siri/.test(n)) s+=5;
+    if(/samantha|serena|allison|ava|zoe|karen|moira|daniel|nicky|aaron/.test(n)) s+=3;
+    if(/google/.test(n)) s+=2;
+    if(/female/.test(n)) s+=1;
+    if(v.default) s+=1;
+    if(/compact|eloquence|albert|zarvox|fred|junior|ralph|whisper|bells|boing|bad|bahh|trinoids/.test(n)) s-=6; // novelty/robotic
+    return s;
+  };
+  vs.sort((a,b)=>score(b)-score(a));
+  chosenVoice=vs[0];
+}
+if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
 function speak(text){
   if(!voiceOn || !window.speechSynthesis) return;
   speechSynthesis.cancel();
+  if(!chosenVoice) pickVoice();
   const u=new SpeechSynthesisUtterance(text);
-  u.rate=1.05; u.pitch=1; u.volume=1;
+  if(chosenVoice) u.voice=chosenVoice;
+  u.rate=1.0; u.pitch=1; u.volume=1;
   speechSynthesis.speak(u);
 }
 
