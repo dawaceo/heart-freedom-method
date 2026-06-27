@@ -355,9 +355,16 @@ function load(){ try{return JSON.parse(localStorage.getItem(LS_KEY))||[]}catch(e
 function persist(){ localStorage.setItem(LS_KEY, JSON.stringify(sessions)); }
 function newSession(){
   sid = "s"+Date.now();
-  data = { id:sid, created:new Date().toISOString(), answers:{} };
+  data = { id:sid, created:new Date().toISOString(), answers:{}, rounds:[] };
   sessions.unshift(data); persist();
   idx = 0; render();
+}
+function archiveRound(){
+  if(!data.rounds) data.rounds=[];
+  data.rounds.push(Object.assign({}, data.answers));   // keep the round just completed
+  const carry = data.answers.focus;                    // the goal carries across rounds
+  data.answers = carry ? {focus:carry} : {};           // fresh fields for the new layer
+  persist();
 }
 function saveAnswers(){
   const cur = STEPS[idx];
@@ -469,7 +476,7 @@ function render(){
 
   stage.innerHTML=`<div class="card">${parts.join("")}</div>`;
   wireMics();
-  if(s.loop) document.getElementById("loopBtn").onclick=()=>{saveAnswers();idx=1;render();};
+  if(s.loop) document.getElementById("loopBtn").onclick=()=>{saveAnswers();archiveRound();idx=1;render();window.scrollTo(0,0);};
 
   nextBtn.textContent = "Continue";
   // build spoken text from prompt + notes
@@ -501,19 +508,29 @@ backBtn.onclick=()=>{
 
 /* ---------------- export ---------------- */
 function fmtDate(iso){ const d=new Date(iso); return d.toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}); }
+function roundLines(a, h){
+  const L=[];
+  L.push(`${h} Step 3 — Sensation`);
+  L.push(`- Location: ${a.loc||"—"}`,`- Shape/size: ${a.shape||"—"}`,`- Color: ${a.color||"—"}`,`- Temperature: ${a.temp||"—"}`,`- Texture: ${a.texture||"—"}`,"");
+  L.push(`${h} Step 4 — Emotion`,`${a.emotion||"—"}`,"");
+  L.push(`${h} Step 5 — Age & scene`,`Age: ${a.age||"—"}`,"",`${a.scene||"—"}`,"");
+  L.push(`${h} Step 7 — Beliefs`,`**Limiting belief:** ${a.limiting||"—"}`,"",`**New empowering belief:** ${a.newbelief||"—"}`,"");
+  L.push(`${h} Step 8 — Future self`,`${a.future||"—"}`,"");
+  L.push(`${h} Step 10 — Insights`,`${a.insights||"—"}`,"");
+  return L;
+}
 function toMarkdown(){
-  const a=data.answers;
+  const rounds=(data.rounds||[]).concat([data.answers]);
+  const multi=rounds.length>1;
+  const focus=(data.rounds&&data.rounds[0]&&data.rounds[0].focus)||data.answers.focus;
   const L=[];
   L.push(`# Heart Freedom Method — Session`);
   L.push(`*${fmtDate(data.created)}${coachMode?" · guided by a partner":""}*`,"");
-  if(a.focus){L.push(`**Working on:** ${a.focus}`,"");}
-  L.push(`## Step 3 — Sensation`);
-  L.push(`- Location: ${a.loc||"—"}`,`- Shape/size: ${a.shape||"—"}`,`- Color: ${a.color||"—"}`,`- Temperature: ${a.temp||"—"}`,`- Texture: ${a.texture||"—"}`,"");
-  L.push(`## Step 4 — Emotion`,`${a.emotion||"—"}`,"");
-  L.push(`## Step 5 — Age & scene`,`Age: ${a.age||"—"}`,"",`${a.scene||"—"}`,"");
-  L.push(`## Step 7 — Beliefs`,`**Limiting belief:** ${a.limiting||"—"}`,"",`**New empowering belief:** ${a.newbelief||"—"}`,"");
-  L.push(`## Step 8 — Future self`,`${a.future||"—"}`,"");
-  L.push(`## Step 10 — Insights`,`${a.insights||"—"}`,"");
+  if(focus){L.push(`**Working on:** ${focus}`,"");}
+  rounds.forEach(function(a,i){
+    if(multi) L.push(`## Round ${i+1}`,"");
+    L.push.apply(L, roundLines(a, multi?"###":"##"));
+  });
   return L.join("\n");
 }
 function exportMd(){
@@ -563,6 +580,16 @@ function wireMics(){
   });
 }
 function stopMic(btn){ if(btn) btn.classList.remove("rec"); activeRec=null; activeMic=null; }
+function toast(msg){
+  let t=document.getElementById("hfmToast");
+  if(!t){
+    t=document.createElement("div"); t.id="hfmToast";
+    t.style.cssText="position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#36303a;color:#fff;padding:11px 16px;border-radius:12px;font-size:.85rem;line-height:1.4;max-width:86%;text-align:center;z-index:60;box-shadow:0 12px 32px -12px rgba(0,0,0,.45);opacity:0;transition:opacity .2s;pointer-events:none;";
+    document.body.appendChild(t);
+  }
+  t.textContent=msg; t.style.opacity="1";
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.style.opacity="0"; }, 5000);
+}
 function toggleDictation(targetId, btn){
   if(activeRec && activeMic===btn){ activeRec.stop(); return; }   // tap again to stop
   if(activeRec){ activeRec.stop(); }
@@ -578,7 +605,17 @@ function toggleDictation(targetId, btn){
     let txt=""; for(let i=0;i<e.results.length;i++){ txt+=e.results[i][0].transcript; }
     el.value = base + txt;
   };
-  rec.onerror=function(){ el.placeholder=ph; stopMic(btn); };
+  rec.onerror=function(e){
+    el.placeholder=ph; stopMic(btn);
+    const err=e&&e.error;
+    if(err==="not-allowed"||err==="service-not-allowed"){
+      toast("Microphone is blocked. Allow mic access for this site in your browser, then tap the mic again.");
+    } else if(err==="audio-capture"){
+      toast("No microphone was found on this device.");
+    } else if(err==="no-speech"){
+      toast("Didn't catch anything — tap the mic and try again.");
+    }
+  };
   rec.onend=function(){ el.placeholder=ph; stopMic(btn); saveAnswers(); };
   activeRec=rec; activeMic=btn; btn.classList.add("rec"); el.focus();
   try{ rec.start(); }catch(err){ el.placeholder=ph; stopMic(btn); }

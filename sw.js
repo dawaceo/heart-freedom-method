@@ -1,5 +1,5 @@
 /* Heart Freedom Method — offline cache */
-const CACHE = "hfm-v1";
+const CACHE = "hfm-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -19,11 +19,25 @@ self.addEventListener("activate", e => {
 });
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy)).catch(()=>{});
-      return res;
-    }).catch(() => caches.match("./index.html")))
-  );
+  const req = e.request;
+  const isPage = req.mode === "navigate" || req.destination === "document";
+  if (isPage) {
+    // network-first so deployed updates reach users; fall back to cache offline
+    e.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
+        return res;
+      }).catch(() => caches.match(req).then(hit => hit || caches.match("./index.html")))
+    );
+  } else {
+    // cache-first for static assets (icons, manifest)
+    e.respondWith(
+      caches.match(req).then(hit => hit || fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
+        return res;
+      }))
+    );
+  }
 });
