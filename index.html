@@ -36,7 +36,7 @@
 
   /* ---- top bar ---- */
   .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
-  .brand{display:flex;align-items:center;gap:10px;}
+  .brand{display:flex;align-items:center;gap:10px;cursor:pointer;}
   .mark{width:30px;height:30px;flex:0 0 auto;}
   .brand h1{font-family:var(--serif);font-size:1.06rem;font-weight:600;margin:0;letter-spacing:.2px;}
   .brand small{display:block;font-size:.7rem;color:var(--ink-soft);letter-spacing:.14em;text-transform:uppercase;}
@@ -133,6 +133,9 @@
   .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,254,252,.86);
     backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom));}
   .nav .inner{max-width:680px;margin:0 auto;display:flex;gap:12px;align-items:center;}
+  .nav.centered .inner{justify-content:center;}
+  .nav.centered #back{display:none;}
+  .nav.centered #next{flex:0 0 auto;min-width:240px;}
   .btn{flex:1;border:none;border-radius:14px;padding:14px;font-size:1rem;font-weight:600;cursor:pointer;transition:.18s;font-family:var(--sans);}
   .btn.prim{background:var(--accent);color:#fff;box-shadow:0 10px 24px -10px var(--accent);}
   .btn.prim:hover{background:var(--accent-deep);}
@@ -170,7 +173,7 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="brand">
+    <div class="brand" title="Back to start" role="button" aria-label="Back to start">
       <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M24 41C24 41 7 30.5 7 18.5C7 12.7 11.5 8.5 16.6 8.5C20 8.5 22.6 10.4 24 13C25.4 10.4 28 8.5 31.4 8.5C36.5 8.5 41 12.7 41 18.5C41 30.5 24 41 24 41Z" stroke="#9a6db0" stroke-width="2.4" fill="#f0e7f4"/>
         <path d="M16 21H21L23 17L26 26L28 21H32" stroke="#7a4f93" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -412,6 +415,7 @@ function fieldHTML(f){
 function render(){
   buildProgress();
   const s=STEPS[idx];
+  document.getElementById("nav").classList.toggle("centered", !!s.intro);
   let h="";
 
   if(s.intro){
@@ -512,6 +516,13 @@ nextBtn.onclick=()=>{
   if(STEPS[idx].finish){ openDrawer(); return; }
   idx=Math.min(idx+1,STEPS.length-1); render(); window.scrollTo(0,0);
 };
+function goHome(){
+  if(activeRec) activeRec.stop();
+  if(!STEPS[idx].intro) saveAnswers();
+  stopNarration();
+  idx=0; render(); window.scrollTo(0,0);
+}
+document.querySelector(".brand").onclick=goHome;
 backBtn.onclick=()=>{
   if(activeRec) activeRec.stop();
   if(!STEPS[idx].intro) saveAnswers();
