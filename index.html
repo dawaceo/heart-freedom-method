@@ -204,6 +204,13 @@
   <h3>Saved sessions</h3>
   <div id="sessList"></div>
   <button class="iconbtn" id="newSess" style="margin-top:8px">＋ New session</button>
+  <div style="margin-top:24px">
+    <h4 class="vp-h">Narration voice</h4>
+    <div class="seg" id="genderSeg">
+      <button data-g="f">Female</button>
+      <button data-g="m">Male</button>
+    </div>
+  </div>
   <div id="drawerSupport" style="margin-top:24px"></div>
 </div>
 
@@ -338,6 +345,7 @@ let data = {};
 let idx = 0;
 let voiceOn = false;
 let coachMode = (localStorage.getItem("hfm_mode")==="coach");
+let voiceGender = (localStorage.getItem("hfm_voicegender")==="m") ? "m" : "f";
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const SR_OK = !!SR;
 let activeRec=null, activeMic=null;
@@ -561,6 +569,24 @@ function setMode(c){
 modeBtn.onclick=()=>setMode(!coachMode);
 updateModeBtn();
 
+/* narration voice gender (female / male) */
+const genderSeg=document.getElementById("genderSeg");
+function updateGenderSeg(){
+  if(!genderSeg) return;
+  genderSeg.querySelectorAll("button").forEach(b=>b.classList.toggle("on", b.dataset.g===voiceGender));
+}
+if(genderSeg){
+  genderSeg.querySelectorAll("button").forEach(b=>{
+    b.onclick=()=>{
+      voiceGender=b.dataset.g;
+      localStorage.setItem("hfm_voicegender", voiceGender);
+      updateGenderSeg();
+      if(voiceOn) render();   // replay current step in the new voice
+    };
+  });
+  updateGenderSeg();
+}
+
 /* ---------------- voice ---------------- */
 const voiceBtn=document.getElementById("voiceBtn");
 voiceBtn.onclick=()=>{
@@ -610,7 +636,8 @@ function stopNarration(){
 function narrate(i, fallbackText){
   stopNarration();
   if(!voiceOn) return;
-  const a=new Audio("audio/narr-"+i+".m4a");
+  const dir = voiceGender==="m" ? "audio/m/" : "audio/";
+  const a=new Audio(dir+"narr-"+i+".m4a");
   a.onerror=function(){ if(voiceOn) speak(fallbackText); };
   narrAudio=a;
   const p=a.play();
