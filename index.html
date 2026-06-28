@@ -204,7 +204,6 @@
   <h3>Saved sessions</h3>
   <div id="sessList"></div>
   <button class="iconbtn" id="newSess" style="margin-top:8px">＋ New session</button>
-  <div id="voicePicker" style="margin-top:24px"></div>
   <div id="drawerSupport" style="margin-top:24px"></div>
 </div>
 
@@ -432,7 +431,7 @@ function render(){
     };
     backBtn.style.visibility="hidden";
     nextBtn.textContent=sessions.length>1?"Begin":s.cta;
-    speak(s.title+". "+introBody.replace(/<[^>]+>/g,""));
+    narrate(idx, s.title+". "+introBody.replace(/<[^>]+>/g,""));
     return;
   }
 
@@ -461,7 +460,7 @@ function render(){
     document.getElementById("againBtn").onclick=newSession;
     wireMics();
     nextBtn.textContent="Done";
-    speak(s.title+". "+s.prompt);
+    narrate(idx, s.title+". "+s.prompt);
     return;
   }
 
@@ -487,7 +486,7 @@ function render(){
   // build spoken text from prompt + notes
   let spoken=s.title+". "+s.prompt.replace(/<[^>]+>/g,"");
   if(s.note) spoken+=" "+s.note.replace(/<[^>]+>/g,"");
-  speak(spoken);
+  narrate(idx, spoken);
 }
 
 function recallHTML(){
@@ -566,8 +565,8 @@ updateModeBtn();
 const voiceBtn=document.getElementById("voiceBtn");
 voiceBtn.onclick=()=>{
   voiceOn=!voiceOn; voiceBtn.classList.toggle("on",voiceOn);
-  if(!voiceOn && window.speechSynthesis) speechSynthesis.cancel();
-  if(voiceOn) render(); // trigger speak of current
+  if(!voiceOn) stopNarration();
+  if(voiceOn) render(); // play narration for current step
 };
 let chosenVoice=null;
 let voiceURI=localStorage.getItem("hfm_voice")||"";
@@ -600,6 +599,22 @@ function speak(text){
   if(chosenVoice) u.voice=chosenVoice;
   u.rate=1.0; u.pitch=1; u.volume=1;
   speechSynthesis.speak(u);
+}
+
+/* pre-recorded neural narration; falls back to device voice if a clip can't load */
+let narrAudio=null;
+function stopNarration(){
+  if(narrAudio){ try{narrAudio.pause();}catch(e){} narrAudio=null; }
+  if(window.speechSynthesis) speechSynthesis.cancel();
+}
+function narrate(i, fallbackText){
+  stopNarration();
+  if(!voiceOn) return;
+  const a=new Audio("audio/narr-"+i+".m4a");
+  a.onerror=function(){ if(voiceOn) speak(fallbackText); };
+  narrAudio=a;
+  const p=a.play();
+  if(p && p.catch) p.catch(function(){ if(voiceOn) speak(fallbackText); });
 }
 function testVoice(){
   if(!window.speechSynthesis) return;
@@ -681,7 +696,7 @@ const sessList=document.getElementById("sessList");
 document.getElementById("sessBtn").onclick=openDrawer;
 document.getElementById("newSess").onclick=()=>{newSession();closeDrawer();};
 drawerBg.onclick=closeDrawer;
-function openDrawer(){ renderSessions(); populateVoicePicker(); document.getElementById("drawerSupport").innerHTML=supportHTML(); drawer.classList.add("show"); drawerBg.classList.add("show"); }
+function openDrawer(){ renderSessions(); document.getElementById("drawerSupport").innerHTML=supportHTML(); drawer.classList.add("show"); drawerBg.classList.add("show"); }
 function closeDrawer(){ drawer.classList.remove("show"); drawerBg.classList.remove("show"); }
 function renderSessions(){
   if(!sessions.length){ sessList.innerHTML=`<p class="muted">No sessions yet.</p>`; return; }

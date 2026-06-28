@@ -1,12 +1,15 @@
 /* Heart Freedom Method — offline cache */
-const CACHE = "hfm-v3";
+const CACHE = "hfm-v4";
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icon-192.png",
   "./icon-512.png",
-  "./apple-touch-icon.png"
+  "./apple-touch-icon.png",
+  "./audio/narr-0.m4a","./audio/narr-1.m4a","./audio/narr-2.m4a","./audio/narr-3.m4a",
+  "./audio/narr-4.m4a","./audio/narr-5.m4a","./audio/narr-6.m4a","./audio/narr-7.m4a",
+  "./audio/narr-8.m4a","./audio/narr-9.m4a","./audio/narr-10.m4a"
 ];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
