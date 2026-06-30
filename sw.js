@@ -1,9 +1,10 @@
 /* Heart Freedom Method — offline cache */
-const CACHE = "hfm-v7";
+const CACHE = "hfm-v8";
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
+  "./heart.png",
   "./icon-192.png",
   "./icon-512.png",
   "./apple-touch-icon.png",
